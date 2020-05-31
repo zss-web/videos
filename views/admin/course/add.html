@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-grid.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-reboot.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head>
+<body>
+<div class="container border">
+    <div class="row p-3">
+        <%-include("../leftmenus.html")%>
+        <div class="col-9">
+            <div class="p-3 border rounded">
+                <div>
+                   <a class="btn btn-sm btn-outline-primary" href="/admin/course" target="_blank">课程列表</a>
+                </div>
+                <form method="post" action="/admin/course" enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="category">课程名称:</label>
+                            <input type="text" name="name" id="category" class="form-control" placeholder="请输入分类名臣">
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher">讲师：</label>
+                            <select class="form-control" name="teacher" id="teacher" >
+                               <%data.teacher.forEach(function(teacher){%>
+                                <option value="<%=teacher._id%>"><%=teacher.username%></option>
+                                <%})%>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <label for="catid">所属分类：</label>
+                                <select class="form-control" name="category" id="catid" >
+                                    <%data.category.forEach(function(category){%>
+                                    <option value="<%=category._id%>"><%=category.name%></option>
+                                    <%})%>
+
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="subcat">二级分类：</label>
+                                <select class="form-control" name="subcat" id="subcat">
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="thumbnail">缩略图：</label>
+                            <input class="form-control" name="thumbnail" id="thumbnail" type="file">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="publisher">编辑：</label>
+                            <select class="form-control" name="publisher" id="publisher" >
+                                <%data.publisher.forEach(function(publisher){%>
+                                <option value="<%=publisher._id%>"><%=publisher.username%></option>
+                                <%})%>
+                            </select>
+
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">提交</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script src="/javascripts/jQuery.3.1.4.js"></script>
+<script src="/bootstrap/js/bootstrap.js"></script>
+<script>
+    $(function () {
+        $.ajax({
+            type: "GET",
+            url: "/admin/subcat/bycid",
+            data: "categoryid="+$("#catid").val(),
+            dataType:'JSON',
+            success: function(result){
+               result.forEach(function (subcat) {
+                   $("#subcat").append("<option value='"+subcat._id+"'>"+subcat.name+"</option>");
+               })
+            }
+        });
+
+        //这也是做到无刷新切换内容
+        $("#catid").change(function(){
+            $.ajax({
+                type: "GET",
+                url: "/admin/subcat/bycid",
+                data: {categoryid:$("#catid").val()},//把当前选中一级分类的id传到后台查询属于它的子类
+                dataType:'JSON',
+                success: function(result){
+                    //把之前的二级分类数据下拉选项全部清空
+                    $("#subcat").empty();
+
+                    //把查到的子分类，循环添加到二级分类的选项中
+                    result.forEach(function (subcat) {
+                        $("#subcat").append("<option value='"+subcat._id+"'>"+subcat.name+"</option>");
+                    })
+                }
+            });
+        })
+    })
+</script>

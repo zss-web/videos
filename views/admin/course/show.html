@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-grid.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-reboot.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <style>
+        .section{
+            width:100%;
+            line-height: 30px;
+        }
+    </style>
+</head>
+<body>
+<%if(message){%>
+<div class="alert alert-<%=infotype%> alert-dismissible fade show" role="alert">
+    <strong>信息：</strong> <%=message%>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<%}%>
+<div class="container border">
+    <div class="row p-3">
+        <%-include("../leftmenus.html")%>
+        <div class="col-9">
+            <div class="p-3 border rounded">
+                <table class="table table-bordered">
+                    <tr>
+                        <td colspan="3">
+                            <img src="/uploads/course/<%=course.thumbnail%>" width="100%" height="360px" alt="">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>课程名称：</td>
+                        <td  class="text-left"><%=course.name%></td>
+
+                    </tr>
+                    <tr>
+                        <td>讲师：</td>
+                        <td class="text-left"><img class="rounded-circle mr-3" src="/uploads/headpic/<%=course.teacher.headpic%>" height="40" width="40" alt=""><%if(course.teacher){%><%=course.teacher.username%><%}%></td>
+
+                    </tr>
+                    <tr>
+                        <td>编辑：</td>
+                        <%if(course.publisher){%>
+                        <td  class="text-left"><img class="rounded-circle mr-3" src="/uploads/headpic/<%=course.publisher.headpic%>" height="40" width="40" alt=""><%=course.publisher.username%></td>
+                        <%}else{%>
+                        <td></td>
+                        <%}%>
+
+                    </tr>
+                    <tr>
+                        <td>所属分类：</td>
+                        <td  class="text-left"><%if(course.category){%><%=course.category.name%><%}%></td>
+
+                    </tr>
+                    <tr>
+                        <td>课程章节：</td>
+                        <td  class="text-left">
+<!--                            <button id="chapterbtn">显示课程章内容：</button>-->
+                            <table id="showchapter" class="table table-bordered">
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>课程创建时间：</td>
+                        <td  class="text-left"><%=course.create_at%></td>
+
+                    </tr>
+                    <tr>
+                        <td>最后更新时间：</td>
+                        <td  class="text-left"><%=course.update_at%></td>
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script src="/javascripts/jQuery.3.1.4.js"></script>
+<script src="/bootstrap/js/bootstrap.js"></script>
+<script>
+    $(function(){
+            $.ajax({
+                method:'GET',
+                url:"/admin/chapter",
+                data:{id:"<%=course._id%>"},
+                dataType:'JSON',
+                success:function (result,err) {
+                    console.log(result,err);
+                    if(result){
+                        result.forEach(function(chapter,i){
+                            $("#showchapter").append('<tr chapter="'+chapter._id+'"><td>'+(i+1)+'</td><td class="text-left">'+chapter.name+'</td><td><a class="btn btn-outline-primary" href="/admin/section/'+chapter._id+'" >查看章内容</a></td></tr>');
+                        })
+                    }
+                }
+            });
+    })
+
+
+</script>

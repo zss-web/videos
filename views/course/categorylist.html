@@ -1,0 +1,87 @@
+<%-include("../layout/header.html",{title:'用户登录页面'})%>
+<style>
+    .text-secondary.a{
+        color: rgba(0,0,0,0.5);
+    }
+  .list-group  li:hover{
+        background: #eeeeee;
+    }
+    .text-secondary.a:hover{
+        color: rgba(0,0,0,0.7);
+    }
+    .list-group-item.active{
+        background: #e2e2e2;
+        border-color:transparent;
+        border-left: 2px solid #2aebe2;
+    }
+</style>
+<div class="container-fluid mt-4">
+    <div class="row mt-3">
+        <div class="col-2">
+            <ul class="list-group menu-left">
+                <%data.category.forEach(function(category){%>
+                <li class="list-group-item">
+                    <a class="text-secondary" href="/lesson/category/<%=category._id%>"><%=category.name%></a>
+                </li>
+                <%})%>
+            </ul>
+
+        </div>
+        <div class="col-7">
+            <div class="row">
+                <%data.course.forEach(function(course){%>
+                <div class="col-3">
+                    <div class="card mb-4">
+                        <figure class="j-img">
+                            <a href="/lesson/show/<%=course._id%>">
+                                <img src="/uploads/course/<%=course.thumbnail%>" width="100%" alt="">
+                            </a>
+                        </figure>
+
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a class="text-secondary" href="/lesson/show/<%=course._id%>"><%=course.name%></a></h5>
+                            <div><span>讲师:<%=course.teacher.username%></span></div>
+                        </div>
+                    </div>
+                </div>
+                <%})%>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    <h4>学习人数最多的课程：</h4>
+                </div>
+                <%data.topCourse.forEach(function(course){%>
+                <div class="media p-2">
+                    <img src="/uploads/headpic/<%=course.publisher.headpic%>" alt="" width="80px" height="80px"  class="m-3 mb-auto">
+                    <div class="media-body">
+                        <h5 class="mt-2"><%=course.name%></h5>
+                        <div><span>讲师:<%=course.publisher.username%></span></div>
+                        <p style="color: #c6c8ca;font-size: 12px">内容：<%=course.content%></p>
+                    </div>
+                </div>
+                <%})%>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="/javascripts/jQuery.3.1.4.js"></script>
+<script src="/bootstrap/js/bootstrap.js"></script>
+<script>
+    $(function () {
+        //each遍历，输出每个列表项的值
+        $('.menu-left').find('a').each(function () {
+            //得到所以的a标签器href，当与定位的元素的href相同是给其父集添加active状态
+            //元素 定位在 href
+            if (this.href == document.location.href ) {
+                $(this).parent().addClass('active'); // this.className = 'active';
+            }
+        });
+
+    })
+</script>
+<!--<%-include("../layout/footer.html")%>-->

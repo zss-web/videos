@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html>
+        <head>
+            <title></title>
+            <link rel='stylesheet' href='/bootstrap/css/bootstrap.css' />
+            <link rel='stylesheet' href='/bootstrap/css/bootstrap-grid.css' />
+            <link rel='stylesheet' href='/bootstrap/css/bootstrap-reboot.css' />
+            <link rel='stylesheet' href='/stylesheets/style.css' />
+            <style>
+                tr:nth-child(odd){
+                    background: rgba(226, 227, 229, 0.22);
+                }
+            </style>
+        </head>
+<body>
+<%if(message){%>
+<div class="alert alert-<%=infotype%> alert-dismissible fade show" role="alert">
+    <strong>信息：</strong> <%=message%>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<%}%>
+<div class="container border">
+    <div class="row p-3">
+        <%-include("../leftmenus.html")%>
+        <div class="col-9">
+            <div class="p-3 border rounded">
+                <table class="table table-bordered">
+<!--                    这个list页面展示的是所有的节，与show不同于show是某章的节数-->
+                    <tr>
+                        <th>节</th>
+                        <th>节内容</th>
+                        <th>所属章</th>
+                    </tr>
+                    <% data.forEach(function(section){%>
+                    <tr>
+
+                        <td  class="text-left"><a style="text-decoration: none" href="/admin/section/<%=section.chapter._id%>"><%=section.name%></a></td>
+                        <td>
+                            <%=section.content%>
+                        </td>
+                        <td><%=section.chapter.name%></td>
+                    </tr>
+
+                    <% })%>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script src="/javascripts/jQuery.3.1.4.js"></script>
+<script src="/bootstrap/js/bootstrap.js"></script>
+
+</title>
+</head>
+<body>
+
+</body>
+</html>

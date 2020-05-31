@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-grid.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-reboot.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head>
+<body>
+<%if(message){%>
+<div class="alert alert-<%=infotype%> alert-dismissible fade show" role="alert">
+    <strong>信息：</strong> <%=message%>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<%}%>
+<div class="container border">
+    <div class="row p-3">
+        <%-include("../leftmenus.html")%>
+        <div class="col-9">
+            <div class="p-3 border rounded">
+                <h1>添加节</h1>
+                <form action="/admin/section/add" method="post">
+                    <div class="form-group">
+                        <lable for="setcionname">课程节名称</lable>
+                        <input type="text" class="form-control" name="name" id="setcionname">
+                    </div>
+                    <div class="form-group">
+                        <lable for="course">所属课程</lable>
+                        <select class="form-control" name="course" id="course">
+                            <%data.forEach(function(course){%>
+                            <option value="<%=course._id%>"><%=course.name%></option>
+                            <%})%>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <lable for="chapter">所属章</lable>
+                        <select class="form-control" name="chapter" id="chapter">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <lable for="content">课程节介绍</lable>
+                        <textarea name="content" id="content" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderno">排列顺序</label>
+                        <input type="number" class="form-control" name="orderno" id="orderno">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn-outline-primary btn" value="提交">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script src="/javascripts/jQuery.3.1.4.js"></script>
+<script src="/bootstrap/js/bootstrap.js"></script>
+
+<script>
+    $(function(){
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/chapter",
+            data: {id:$("#course").val()},
+            dataType:'JSON',
+            success: function(result){
+                result.forEach(function (chapter) {
+                    $("#chapter").append("<option value='"+chapter._id+"'>"+chapter.name+"</option>");
+                })
+            }
+        });
+        //课程改变时
+        $("#course").change(function () {
+            //清空章节
+            $("#chapter").empty();
+            $.ajax({
+                type: "GET",
+                url: "/admin/chapter",
+                //当前课程id
+                data: {id:$(this).val()},
+                dataType:'JSON',
+                success: function(result){
+                    result.forEach(function (chapter) {
+                        $("#chapter").append("<option value='"+chapter._id+"'>"+chapter.name+"</option>");
+                    })
+                }
+            });
+        })
+    })
+</script>

@@ -1,0 +1,84 @@
+<%-include("../layout/header.html",{title:'用户登录页面'})%>
+<div class="container-fluid mt-4">
+    <div class="row mt-3">
+        <div class="col-2">
+            <ul class="list-group">
+                <%data.category.forEach(function(category){%>
+                <li class="list-group-item">
+                    <a class="text-secondary" href="/lesson/category/<%=category._id%>"><%=category.name%></a>
+                </li>
+                <%})%>
+            </ul>
+
+        </div>
+        <div class="col-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="media p-2 position-relative">
+                        <figure class="j-coursepic">
+                            <img src="/uploads/course/<%=data.course.thumbnail%>" alt="">
+                        </figure>
+                        <div class="media-body ml-2 p-2 ">
+                            <h5 class="mt-0"><%=data.course.name%></h5>
+                            <p>课程的介绍信息</p>
+                            <div><span>讲师:<%=data.course.teacher.username%></span></div>
+                            <a class="btn btn-success position-absolute " href="/lesson/learn/<%=data.course._id%>" style="bottom:30px;">学习本课程</a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card mt-3 border-0">
+
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a id="getContents" class="nav-link text-success" href="javascript:;">详细介绍</a>
+                    </li>
+                    <li class="nav-item " >
+                        <a id="getChapter" class="nav-link" href="javascript:;">课程章节</a>
+                    </li>
+                </ul>
+
+                <div id="courseContent" class="cardbody border" style="height:600px;">
+                    课程介绍
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    <h4>学习人数最多的课程：</h4>
+                </div>
+                <%data.topCourse.forEach(function(course){%>
+                <div class="media p-2">
+                    <svg class="bd-placeholder-img mr-3" width="120" height="120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 64x64"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">64x64</text></svg>
+                    <div class="media-body">
+                        <h5 class="mt-0"><%=course.name%></h5>
+                        <p>课程的介绍信息</p>
+                        <div><span>讲师:<%=course.teacher.username%></span></div>
+                    </div>
+                </div>
+                <%})%>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<%-include("../layout/footer.html")%>
+<script>
+    $(function(){
+        $("#getContents").click(function(){
+           $(this).addClass("text-success");
+            $("#getChapter").removeClass("text-success")
+           $("#courseContent").html("课程的详细介绍：图文混合的。是用富媒体编辑器添加的内容")
+        });
+        $("#getChapter").click(function(){
+            $(this).addClass("text-success");
+            $("#getContents").removeClass("text-success");
+            $("#courseContent").html("显示他的章节内容")
+        });
+
+    })
+</script>

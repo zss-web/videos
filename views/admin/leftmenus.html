@@ -1,0 +1,100 @@
+<style>
+    a{
+        color: rgba(0,0,0,0.5);
+    }
+    li:hover{
+        background: #eeeeee;
+    }
+    a:hover{
+        color: rgba(0,0,0,0.7);
+    }
+    .list-group-item.active{
+        background: #e2e2e2;
+        border-color:transparent;
+        border-left: 2px solid #eb95d9;
+    }
+</style>
+<!--<link rel="stylesheet" href="/stylesheets/style.css">-->
+<frameset>
+    <div class="col-3">
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link menu-top1"  style="text-decoration: none" >
+                            分类管理
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <ul class="list-group">
+                        <li class="list-group-item ">
+                            <a href="/admin/category" class="active" style="text-decoration: none">分类列表</a>
+                        </li>
+                        <li class="list-group-item ">
+                            <a href="/admin/category/add" style="text-decoration: none">添加一级分类</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/admin/subcat/add" style="text-decoration: none">添加二级分类</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed menu-top2"  style="text-decoration: none" >
+                            课程管理
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree"  >
+                    <ul class="list-group m-0 rounded-0">
+                        <li class="list-group-item">
+                            <a href="/admin/course" style="text-decoration: none">课程列表</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/admin/courses/add" style="text-decoration: none">添加课程</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/admin/chapter/list" style="text-decoration: none">章管理</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/admin/chapter/add" style="text-decoration: none">添加章</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/admin/section" style="text-decoration: none">节管理</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/admin/sections/add" style="text-decoration: none">添加小节</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/admin/videos" style="text-decoration: none">视频管理</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/admin/videos/add" style="text-decoration: none">添加视频</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</frameset>
+
+<script src="/javascripts/jQuery.3.1.4.js"></script>
+<script src="/bootstrap/js/bootstrap.js"></script>
+<script>
+   $(function () {
+       //each遍历，输出每个列表项的值
+       $('.list-group').find('a').each(function () {
+           //得到所以的a标签器href，当与定位的元素的href相同是给其父集添加active状态
+                                //元素 定位在 href
+           if (this.href == document.location.href ) {
+               $(this).parent().addClass('active'); // this.className = 'active';
+           }
+       });
+
+   })
+</script>

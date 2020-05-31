@@ -1,0 +1,55 @@
+<%-include("../layout/header.html",{title:'用户注册页面'})%>
+<div class="container-fluid">
+    <div class="middle-pannel">
+        <h2>用户注册：</h2>
+        <form action="/users/register" method="post">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" class="form-control" id="username" name="username" >
+                  <span style="color: red" class="usernamespan" ></span>
+
+            </div>
+            <div class="form-group">
+                <label for="userpwd">密码</label>
+                <input type="password" class="form-control " name="userpwd" id="userpwd" >
+                <span style="color: red" class="userpwdspan" ></span>
+
+            </div>
+            <div class="form-group">
+                <label for="email">邮箱</label>
+                <input type="email" class="form-control" name="email" id="email">
+            </div>
+            <div class="form-group form-check">
+                <input name="isRemember" type="checkbox" class="form-check-input" id="isRemember">
+                <label class="form-check-label" for="isRemember">是否记住面</label>
+            </div>
+            <button type="submit" class="btn btn-primary">注册</button>
+            <a class="btn btn-outline-primary " href="/users/login">已有账户，去登陆</a>
+        </form>
+    </div>
+</div>
+
+<%-include("../layout/footer.html")%>
+<script>
+    $(function () {
+        $('#username').blur(function () {
+            if ($('#username').val() == ''){
+                $(".usernamespan").html("不能为空");
+            }
+            if ($('#username').val() != ''){
+                $(".usernamespan").html('');
+            }
+        })
+        $('#userpwd').blur(function () {
+            if ($('#userpwd').val() == ''){
+                $(".userpwdspan").html("密码不能为空");
+            }else if ($('#userpwd').val().length < 6){
+                $(".userpwdspan").html('密码最少六位');
+            }else{
+                $(".userpwdspan").html('');
+            }
+        })
+
+
+    })
+</script>

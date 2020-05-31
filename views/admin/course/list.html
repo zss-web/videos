@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-grid.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-reboot.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head>
+<body>
+<%if(message){%>
+<div class="alert alert-<%=infotype%> alert-dismissible fade show" role="alert">
+    <strong>信息：</strong> <%=message%>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<%}%>
+<div class="container border">
+    <div class="row p-3">
+        <%-include("../leftmenus.html")%>
+        <div class="col-9">
+            <div class="p-3 border rounded">
+                <div class="mb-3">
+                   <a class="btn btn-sm btn-outline-primary" href="/admin/course" target="_blank">课程列表</a>
+                </div>
+                <div class="row">
+                    <%data.forEach(function(course){%>
+                    <div class="col-4 pt-2">
+                        <div class="card">
+                            <img src="/uploads/course/<%=course.thumbnail%>" width="100%" height="140" alt="">
+                            <div class="card-body">
+                                <h5 class="card-title"><%=course.name%></h5>
+                                <a href="/admin/course/<%=course._id%>" class="btn btn-primary">课程详情</a>
+                            </div>
+                        </div>
+                    </div>
+                    <%})%>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script src="/javascripts/jQuery.3.1.4.js"></script>
+<script src="/bootstrap/js/bootstrap.js"></script>
+

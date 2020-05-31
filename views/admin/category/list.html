@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-grid.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-reboot.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<%if(message){%>
+<div class="alert alert-<%=infotype%> alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>信息：</strong> <%=message%>
+</div>
+<%}%>
+<div class="container border">
+    <div class="row p-3">
+        <%-include("../leftmenus.html")%>
+
+        <div class="col-9">
+            <div id="echarts" style="width:100%;height: 360px;background: pink ;padding: 20px">
+
+            </div>
+            <div class="p-3 border rounded">
+                <div>
+                    <a class="btn btn-primary btn-sm" href="/admin/category/add" target="_blank">添加一级分类</a>&nbsp;&nbsp;<a class="btn btn-sm btn-outline-primary" href="/admin/subcat/add" target="_blank">添加二级分类</a>
+                </div>
+                <table class="table-bordered">
+                    <tr>
+                        <th>编号</th>
+                        <th>子分类名称</th>
+                        <th>所属父类</th>
+                        <th>操作</th>
+                    </tr>
+                    <%data.forEach(function(subcat,i){%>
+                    <tr>
+                        <td style="width:80px"><%=i+1%></td>
+                        <td style="width:200px;"><%=subcat.name%></td>
+                        <td style="width:200px;"><%=subcat.category.name%></td>
+
+                        <td>
+                            <a class="btn btn-group btn-success">修改</a>
+                            <a class="btn btn-group btn-warning">删除</a></td>
+                    </tr>
+                    <%})%>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script src="/javascripts/jQuery.3.1.4.js"></script>
+<script src="/bootstrap/js/bootstrap.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.js"></script>
+
+<script>
+    var myChart = echarts.init(document.getElementById('echarts'));
+
+    option = {
+        title:{
+            text:"分类详情课程图"
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        color: [
+            '#c563dd',  '#f12909', '#0efe5e'
+        ],
+        xAxis: {
+            type: 'category',
+            data: []
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: [],
+            type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+                color: 'rgba(220, 220, 220, 0.8)'
+            }},
+            {
+                data: [],
+                type: 'line',
+                label: {
+                    show: true,
+                    position: 'insideRight'
+                },
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(255, 255, 25, 0.8)'
+                }
+        },
+            {
+
+                type: 'pie',
+                radius: '30%',
+                center: ['32%', '22%'],
+                data: [ {},  {},  {},  {}, {},  {} ],
+                roseType: 'radius',
+                label: {
+                    color: 'rgba(255, 255, 255, 0.6)'
+                },
+                labelLine: {
+                    lineStyle: {
+                        color: 'rgba(255, 255, 255, 0.6)'
+                    },
+                    smooth: 0.2,
+                    length: 6,
+                    length2: 8
+                },
+                itemStyle: {
+                    color: '#c23531',
+                    shadowBlur: 200,
+                    shadowColor: 'rgba(0, 0, 0, 0.8)'
+                },
+
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                }
+            }
+        ]
+    };
+
+
+    $(function () {
+        $.ajax({
+            url:"/admin/echarts"
+        }).then(res=>{
+            console.log(res)
+            option.xAxis.data=res.category;
+            option.series[0].data=res.courses;
+            option.series[1].data=res.courses;
+            for (i=0;i<res.courses.length;i++){
+                // console.log(option.series[2].data[i].value)
+                // console.log(res.courses[i])
+                option.series[2].data[i].value=res.courses[i];
+                option.series[2].data[i].name=res.category[i];
+            }
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        })
+
+    })
+
+
+</script>

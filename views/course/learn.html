@@ -1,0 +1,139 @@
+<%-include("../layout/header.html",{title:'用户登录页面'})%>
+<div class="container-fluid mt-4">
+    <div class="row border">
+        <div class="col-9 bg-dark video_content">
+            <video class="col-12 p-0" poster="/images/tubiao.png" src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/eadb8ddc86f1791154442a928b042e2f.mp4" controls ></video>
+        </div>
+        <div class="col-3 overflow-auto">
+            <div class="topbar row position-relative border mr-auto">
+                    <div class="courseflag topbar_active">课程目录</div>
+                    <div class="contentflag">评论区</div>
+            </div>
+            <div class="row position-relative border mr-auto coursecon bg-dark">
+                <ul class="list-group bg-dark" id="courseChapter" >
+                    <%data.forEach(function(chapter){%>
+                    <li class="list-group-item bg-dark">
+                        <a class="text-white" href="#" chapterid="<%=chapter._id%>"><%=chapter.name%><span class="ml-5"></span></a>
+                    </li>
+                    <%})%>
+                </ul>
+            </div>
+            <div class="row position-relative border mr-auto contentcon" style="display: none">
+                <div class="chats " id="chats" >
+                    信息<br>
+                </div>
+                <div class="border position-absolute" style="bottom:10px;width:100%">
+                    <form action="javascript:;" class="form-inline">
+                        <input class="form-control" id="message" autocomplete="off" /><input type="submit" value="发言" class="form-control">
+                    </form>
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<%-include("../layout/footer.html")%>
+
+<script>
+    $(function(){
+
+        $(".courseflag").click(function () {
+            $(this).addClass("topbar_active")
+            $(this).siblings().removeClass("topbar_active")
+            $(".coursecon").slideDown(500);
+            $(".contentcon").slideUp(50);
+        })
+        $(".contentflag").click(function () {
+            $(this).addClass("topbar_active")
+            $(this).siblings().removeClass("topbar_active")
+            $(".contentcon").slideDown(500);
+            $(".coursecon").slideUp(50);
+        })
+
+        $("#courseChapter a").one("click",function (e) {
+            e.stopPropagation();
+           $.ajax({
+                method:"GET",
+               url:"/lesson/getSection",
+               data:{id:$(this).attr("chapterid")}
+           }).then(result=>{
+               var str='';
+              result.forEach(function(v,i){
+                  if (i == 0){
+                      str+="<li class='list-group-item bg-dark border-0 border-bottom text-white sectionlist listactive' sectionid='"+v._id+"'>"+v.name+"</li>";
+                  }else {
+                      str+="<li class='list-group-item bg-dark border-0 border-bottom text-white sectionlist' sectionid='"+v._id+"'>"+v.name+"</li>";
+                  }
+              })
+            $(this).after(str);
+           });
+        });
+        //自动触发click事件
+        $("#courseChapter a").trigger("click");
+
+        var videos =[];
+        //委托事件还可以用delegate("sectionlist","click",function(){})
+        $("#courseChapter").on("click",".sectionlist",function (e) {
+            e.stopPropagation();
+            // 点第一下是true再点就是Flase，！undefined就是true
+        // console.log(!$(this).attr("stat"))
+            $(this).addClass("listactive");
+            $(this).siblings().removeClass("listactive");
+            if(!$(this).attr("stat")){
+                $.ajax({
+                    method:"GET",
+                    url:"/lesson/getvideo",
+                    data:{id:$(this).attr("sectionid")}
+                }).then(result=>{
+                    var str='';
+
+                    result.forEach(function(v,i){
+                        videos.push(v.source);
+                        str+="<li class='list-group-item bg-dark border-0 text-white ml-3 videolist' data='"+v.source+"'>"+(i+1)+'.&nbsp;&nbsp;'+v.name+"</li>";
+                    })
+                    $(this).after(str);
+
+                    //设置状态
+                    $(this).attr("stat",true);
+                });
+
+            }
+        });
+
+        if(videos.length>0){
+            $("videos").attr("src",videos[0]);
+        }
+        $("#courseChapter").on("click",".videolist",function (e) {
+            e.stopPropagation();
+            $(this).addClass("listactive");
+            $(this).siblings().removeClass("listactive");
+            var video = document.querySelector("video");
+            video.src = $(this).attr("data");
+            video.pause();
+
+        });
+
+       //1,初始化socket
+        var socket = io();
+        var url = window.location.href;
+        var chatid=url.substr(url.lastIndexOf("/")+1);
+        $('form').submit(function(e){
+            e.preventDefault(); // prevents page reloading
+            //2,向服务器发送信息
+            socket.emit(chatid, $("#message").val());
+            $('#message').val('');
+            return false;
+        });
+        //3。等待并监听服务推送
+        socket.on(chatid,function (msg) {
+            $("#chats").append("<li>"+"她说："+msg+"</li>");
+        })
+    })
+
+
+</script>

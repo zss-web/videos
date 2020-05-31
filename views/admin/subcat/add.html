@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-grid.css' />
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap-reboot.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<div class="container border">
+    <div class="row p-3">
+        <%-include("../leftmenus.html")%>
+
+        <div class="col-9">
+            <div class="p-3 border rounded">
+                <div>
+                    <a class="btn btn-primary btn-sm" href="/admin/category/add" target="_blank">添加一级分类</a>&nbsp;&nbsp;<a class="btn btn-sm btn-outline-primary" href="/admin/category" target="_blank">分类列表</a>
+                </div>
+                <form method="post" action="/admin/subcat">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="category">子分类名称:</label>
+                            <input type="text" name="name" id="category" class="form-control" placeholder="请输入分类名臣">
+                        </div>
+                        <div class="form-group">
+                            <label for="catid">所属父类：</label>
+                            <select class="form-control" name="category" id="catid" >
+                                <%data.forEach(function(category){%>
+<!--                                value="<%=category._id%>" 在路由写req.body.category 则取得的是父集的id-->
+                                <option value="<%=category._id%>"><%=category.name%></option>
+                                <%})%>
+
+                            </select>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="orderno">排序顺序：</label>
+                             <input class="form-control" name="orderno" id="orderno" type="number">
+
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script src="/javascripts/jQuery.3.1.4.js"></script>
+<script src="/bootstrap/js/bootstrap.js"></script>
+

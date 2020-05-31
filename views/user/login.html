@@ -1,0 +1,25 @@
+<%-include("../layout/header.html",{title:'用户登录页面'})%>
+<div class="container-fluid">
+    <div class="middle-pannel">
+        <h2>用户登录：</h2>
+        <form action="/users/login" method="post">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" class="form-control" id="username" name="username">
+
+            </div>
+            <div class="form-group">
+                <label for="userpwd">密码</label>
+                <input type="password" class="form-control" name="userpwd" id="userpwd">
+            </div>
+            <div class="form-group form-check">
+                <input name="isRemember" type="checkbox" class="form-check-input" id="isRemember">
+                <label class="form-check-label" for="isRemember">是否记住面</label>
+            </div>
+            <button type="submit" class="btn btn-primary">登录</button>
+            <a class="btn btn-outline-primary " href="/users/register">注册</a>
+        </form>
+    </div>
+</div>
+
+<%-include("../layout/footer.html")%>
